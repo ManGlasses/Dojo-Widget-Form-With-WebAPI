@@ -1,0 +1,39 @@
+.table {
+    border: 1px solid #87866C;
+    border-collapse: collapse;
+    width: 50%;
+    thead,
+    tbody {
+        tr {
+            th {
+                border: 1px solid #87866C;
+            }
+        }
+    }
+    thead {
+        tr * {
+            padding: 20px 0px;
+        }
+    }
+    tbody {
+        tr {
+            td {
+                border: 1px solid #87866C;
+                text-align: center;
+                input {
+                    margin: 9px 0px;
+                }
+            }
+            td:nth-child(1),
+            td:nth-child(2) {
+                text-align: left;
+            }
+        }
+        tr:nth-child(even) {
+            background-color: #ddd;
+        }
+        tr:nth-child(odd) {
+            background-color: #ffff;
+        }
+    }
+}

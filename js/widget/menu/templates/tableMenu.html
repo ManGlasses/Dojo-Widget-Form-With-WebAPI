@@ -1,0 +1,31 @@
+<div>
+    <div>
+        <h3 data-dojo-attach-point='h3NameResNode'></h3>
+    </div>
+
+    <div>
+        <label>Select Menu Type : </label>
+        <select data-dojo-attach-point='selectShowNode' data-dojo-attach-event='onchange: createTable'>
+            <option value="0" selected>All</option>
+        </select>
+    </div>
+
+    <div>
+        <table class="table">
+            <thead>
+                <tr class="bgBlue textWhite">
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Price(Baht)</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody data-dojo-attach-point='tbodyNode'></tbody>
+        </table>
+    </div>
+
+    <div>
+        <input type="button" value="Add New Menu" data-dojo-attach-event='onclick: addNewRow'>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- css -->
+    <!-- <link rel="stylesheet" href="http://map.nostramap.com/arcgis_js_api/library/3.13/3.13/dijit/themes/claro/claro.css" /> -->
+    <link rel="stylesheet" href="css/main.css" />
+
+    <script>
+        var baseLocation = window.location.origin;
+        var loc = window.location.pathname;
+        var dir = loc.substring(0, loc.lastIndexOf('/'));
+        var dojoConfig = {
+            async: 1,
+            parseOnLoad: true,
+            packages: [{
+                name: "widget",
+                location: baseLocation + dir + '/js/widget'
+            }]
+        }
+    </script>
+
+    <!-- dojo -->
+    <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
+
+    <script src="js/main.js"></script>
+
+    <title>Dojo - Widget - Form - With - WebAPI</title>
+
+</head>
+
+<body class="claro">
+
+    <div id="tableRestaurant"></div>
+    <div id="formRestaurant"></div>
+
+    <div id="tableMenu"></div>
+    <div id="formMenu"></div>
+
+</body>
+
+</html>

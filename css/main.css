@@ -1,0 +1,33 @@
+div {
+  margin: 10px 0px; }
+
+.bgYellow {
+  background-color: #ffd800; }
+
+.bgBlue {
+  background-color: #11167a; }
+
+.textWhite {
+  color: white; }
+
+.table {
+  border: 1px solid #87866C;
+  border-collapse: collapse;
+  width: 50%; }
+  .table thead tr th,
+  .table tbody tr th {
+    border: 1px solid #87866C; }
+  .table thead tr * {
+    padding: 20px 0px; }
+  .table tbody tr td {
+    border: 1px solid #87866C;
+    text-align: center; }
+    .table tbody tr td input {
+      margin: 9px 0px; }
+  .table tbody tr td:nth-child(1),
+  .table tbody tr td:nth-child(2) {
+    text-align: left; }
+  .table tbody tr:nth-child(even) {
+    background-color: #ddd; }
+  .table tbody tr:nth-child(odd) {
+    background-color: #ffff; }

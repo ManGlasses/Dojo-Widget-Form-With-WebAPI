@@ -1,0 +1,23 @@
+<div>
+
+    <div>
+        <label>Name : </label>
+        <input type="text" data-dojo-attach-point='textNameNode' />
+    </div>
+
+    <div>
+        <label>Type : </label>
+        <select data-dojo-attach-point='selectNode'></select>
+    </div>
+
+    <div>
+        <label>Price : </label>
+        <div data-dojo-type="widget/form/textboxNumber" data-dojo-attach-point='textPriceNode'></div>
+    </div>
+
+    <div>
+        <input type="button" value="Save" data-dojo-attach-event='onclick: save' />
+        <input type="button" value="Cancel" data-dojo-attach-event='onclick: resetForm' />
+    </div>
+
+</div>
