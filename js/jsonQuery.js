@@ -1,12 +1,14 @@
 define([
-    'dojo/request',
-    'dojo/json'
-], function (request, json) {
+    'dojo/request'
+], function (request) {
+    let url = 'https://gdev.geotalent.co.th/Training/'
     return {
         getRestaurantType: function () {
-            let url = 'https://gdev.geotalent.co.th/Training/'
-            return request(url + 'api/restauranttype/all')
-        }
+            return request.get(url + 'api/restauranttype/all')
+        },
+        getRestaurant: function () {
+            return request.get(url + 'api/restaurant/all')
+        },
         // addRestaurant: function (indexDataRes, dataRes) {
         //     dataTblRestaurant.push({
         //         id: indexDataRes,
@@ -22,9 +24,15 @@ define([
         //     dataTblRestaurant[indexDataRes].restaurantTypeName = dataRes.restaurantTypeName
         //     dataTblRestaurant[indexDataRes].detail = dataRes.detail
         // },
-        // deleteRestaurant: function (indexDataRes) {
-        //     dataTblRestaurant.splice(indexDataRes, 1)
-        // },
+        deleteRestaurant: function (indexDataRes) {
+            // dataTblRestaurant.splice(indexDataRes, 1)
+            // request.post(url + 'api/restaurant/update', {
+            //     data: {
+            //         "id": 16,
+            //         "name": "sdf"
+            //     }
+            // })
+        },
         // addMenu: function (indexDataMenu, dataMenu) {
         //     dataTblMenu.push({
         //         id: indexDataMenu,

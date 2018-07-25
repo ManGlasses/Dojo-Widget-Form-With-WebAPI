@@ -24,9 +24,9 @@ define([
             domConstruct.empty(this.tbodyNode)
             let selectShowNodeValue = domAttr.get(this.selectShowNode, 'value')
             this.data.forEach((item, index) => {
-                if (item.restaurantType == selectShowNodeValue || selectShowNodeValue == 0) {
+                if (item.restaurantTypeId == selectShowNodeValue || selectShowNodeValue == 0) {
                     let trBodyTable = domConstruct.create('tr', null, this.tbodyNode)
-                    domConstruct.create('td', { innerHTML: item.name }, trBodyTable)
+                    domConstruct.create('td', { innerHTML: item.restaurantName }, trBodyTable)
                     domConstruct.create('td', { innerHTML: item.restaurantTypeName }, trBodyTable)
                     let tdButtonViewMenu = domConstruct.create('td', null, trBodyTable)
                     let btnViewMenu = domConstruct.create('input', { type: 'button', value: 'View Menu' }, tdButtonViewMenu)

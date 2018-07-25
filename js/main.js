@@ -1,26 +1,58 @@
 require([
     'dojo/on',
+    'dojo/json',
     'js/jsonQuery.js',
     'widget/restaurant/tableRestaurant',
     'widget/restaurant/formRestaurant',
     'widget/menu/tableMenu',
     'widget/menu/formMenu',
+    'dojo/request/xhr',
     'dojo/domReady!'
-], function (on, jsonQuery, tableRestaurant, formRestaurant, tableMenu, formMenu) {
-
-    jsonQuery.getRestaurantType().then(function (data) {
-        dataLUTResType = data
+], function (on, json, jsonQuery, tableRestaurant, formRestaurant, tableMenu, formMenu, xhr) {
+    xhr('https://gdev.geotalent.co.th/Training/api/restauranttype/delete', {
+        method: 'POST',
+        handleAs: 'json',
+        headers: { 'X-AspNet-Version': '4.0.30319' },
+        data: {
+            "id": 16
+        }
+    }).then(function (data) {
+        console.log(data)
+    }, function (err) {
+        console.log(err)
     })
+    // jsonQuery.getRestaurantType().then(function (dataRestaurantType) {
+    //     let dataLUTResType = json.parse(dataRestaurantType, true).result
+    //     jsonQuery.getRestaurant().then(function (dataRestaurant) {
+    //         let dataTblRes = json.parse(dataRestaurant, true).result
 
-    // // restaurant
-    // let _tableRestaurant = new tableRestaurant({
-    //     dataType: dataLUTResType,
-    //     data: dataTblRestaurant
-    // }, 'tableRestaurant')
+    //         // restaurant
+    //         let _tableRestaurant = new tableRestaurant({
+    //             dataType: dataLUTResType,
+    //             data: dataTblRes
+    //         }, 'tableRestaurant')
 
-    // let _formRestaurant = new formRestaurant({
-    //     dataType: dataLUTResType
-    // }, 'formRestaurant')
+    //         let _formRestaurant = new formRestaurant({
+    //             dataType: dataLUTResType
+    //         }, 'formRestaurant')
+
+    //         let editIndexRes
+    //         on(_tableRestaurant, 'Click_btnEdit', function (item, index) {
+    //             _formRestaurant.setForm(item)
+    //             editIndexRes = index
+    //         })
+
+    //         on(_tableRestaurant, 'Click_btnDelete', function (index) {
+    //             // editIndexRes = editIndexRes == index ? null : editIndexRes
+    //             // jsonQuery.deleteRestaurant(index)
+    //             // _tableRestaurant.createTable()
+    //             // alert('ลบข้อมูลเรียบร้อย')
+    //             jsonQuery.deleteRestaurant()
+    //         })
+    //     })
+    // })
+
+
 
     // // view menu
     // let _tableMenu
@@ -82,19 +114,6 @@ require([
     //     on(_formMenu, 'Click_btnCancel', function () {
     //         editIndexMenu = null
     //     })
-    // })
-
-    // let editIndexRes
-    // on(_tableRestaurant, 'Click_btnEdit', function (item, index) {
-    //     _formRestaurant.setForm(item)
-    //     editIndexRes = index
-    // })
-
-    // on(_tableRestaurant, 'Click_btnDelete', function (index) {
-    //     editIndexRes = editIndexRes == index ? null : editIndexRes
-    //     jsonQuery.deleteRestaurant(index)
-    //     _tableRestaurant.createTable()
-    //     alert('ลบข้อมูลเรียบร้อย')
     // })
 
     // let currentIdRes = dataTblRestaurant.length

@@ -19,8 +19,8 @@ define([
             })
         },
         setForm: function (data) {
-            domAttr.set(this.textNameNode, 'value', data.name)
-            domAttr.set(this.selectNode, 'value', data.restaurantType)
+            domAttr.set(this.textNameNode, 'value', data.restaurantName)
+            domAttr.set(this.selectNode, 'value', data.restaurantTypeId)
             domAttr.set(this.textareaDetailNode, 'value', data.detail)
         },
         getForm: function () {
