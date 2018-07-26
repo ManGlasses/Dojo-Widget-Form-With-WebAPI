@@ -1,141 +1,113 @@
 require([
+    'dojo/dom',
+    'dojo/dom-construct',
     'dojo/on',
     'dojo/json',
+    'dojo/promise/all',
     'js/jsonQuery.js',
     'widget/restaurant/tableRestaurant',
     'widget/restaurant/formRestaurant',
-    'widget/menu/tableMenu',
-    'widget/menu/formMenu',
-    'dojo/request/xhr',
+    'widget/food/tableFood',
+    'widget/food/formFood',
     'dojo/domReady!'
-], function (on, json, jsonQuery, tableRestaurant, formRestaurant, tableMenu, formMenu, xhr) {
-    xhr('https://gdev.geotalent.co.th/Training/api/restauranttype/delete', {
-        method: 'POST',
-        handleAs: 'json',
-        headers: { 'X-AspNet-Version': '4.0.30319' },
-        data: {
-            "id": 16
-        }
-    }).then(function (data) {
-        console.log(data)
-    }, function (err) {
-        console.log(err)
+], function (dom, domConstruct, on, json, all, jsonQuery, tableRestaurant, formRestaurant, tableFood, formFood) {
+
+    // restaurant
+    let _tableRestaurant = new tableRestaurant().placeAt('tableRestaurant')
+
+    // edit restaurant
+    on(_tableRestaurant, 'Click_btnEdit', function (id) {
+        jsonQuery.getRestaurantType().then(function (data) {
+            let dataRestaurantType = json.parse(data, true).result
+            domConstruct.empty(dom.byId('formRestaurant'))
+            let _formRestaurant = new formRestaurant().placeAt('formRestaurant')
+            _formRestaurant.startup(dataRestaurantType)
+            jsonQuery.getRestaurantById(id).then(function (data) {
+                let dataRestaurantById = json.parse(data, true).result[0]
+                _formRestaurant.setForm(dataRestaurantById)
+                on(_formRestaurant, 'Click_btnSave', function () {
+                    if (confirm('ต้องการบันทึกข้อมูลหรือไม่')) {
+                        let dataFormRestaurant = _formRestaurant.getForm()
+                        jsonQuery.updateRestaurant(id, dataFormRestaurant.name, dataFormRestaurant.detail, dataFormRestaurant.type).then(function () {
+                            updateTableRestaurant()
+                            alert('บันทึกข้อมูลเรียบร้อย')
+                        })
+                    }
+                })
+                on(_formRestaurant, 'Click_btnCancel', function () {
+                    domConstruct.empty(dom.byId('formRestaurant'))
+                })
+            })
+        })
     })
-    // jsonQuery.getRestaurantType().then(function (dataRestaurantType) {
-    //     let dataLUTResType = json.parse(dataRestaurantType, true).result
-    //     jsonQuery.getRestaurant().then(function (dataRestaurant) {
-    //         let dataTblRes = json.parse(dataRestaurant, true).result
 
-    //         // restaurant
-    //         let _tableRestaurant = new tableRestaurant({
-    //             dataType: dataLUTResType,
-    //             data: dataTblRes
-    //         }, 'tableRestaurant')
+    // delete restaurant
+    on(_tableRestaurant, 'Click_btnDelete', function (id) {
+        jsonQuery.deleteRestaurant(id).then(function (data) {
+            let idDeleteRes = data.result.id
+            if (idDeleteRes == id) {
+                domConstruct.empty(dom.byId('formRestaurant'))
+            }
+            updateTableRestaurant()
+            alert('ลบข้อมูลเรียบร้อย')
+        })
+    })
 
-    //         let _formRestaurant = new formRestaurant({
-    //             dataType: dataLUTResType
-    //         }, 'formRestaurant')
+    // add restaurant
+    on(_tableRestaurant, 'Click_btnAddNewRow', function () {
+        jsonQuery.getRestaurantType().then(function (data) {
+            let dataRestaurantType = json.parse(data, true).result
+            domConstruct.empty(dom.byId('formRestaurant'))
+            let _formRestaurant = new formRestaurant().placeAt('formRestaurant')
+            _formRestaurant.startup(dataRestaurantType)
+            on(_formRestaurant, 'Click_btnSave', function () {
+                if (confirm('ต้องการเพิ่มข้อมูลหรือไม่')) {
+                    let inputFormRestaurant = _formRestaurant.getForm()
+                    jsonQuery.addRestaurant(inputFormRestaurant.name, inputFormRestaurant.detail, inputFormRestaurant.type).then(function () {
+                        updateTableRestaurant()
+                        alert('เพิ่มข้อมูลเรียบร้อย')
+                    })
+                }
+            })
+            on(_formRestaurant, 'Click_btnCancel', function () {
+                domConstruct.empty(dom.byId('formRestaurant'))
+            })
+        })
+    })
 
-    //         let editIndexRes
-    //         on(_tableRestaurant, 'Click_btnEdit', function (item, index) {
-    //             _formRestaurant.setForm(item)
-    //             editIndexRes = index
-    //         })
+    // view menu
+    let _tableFood = new tableFood()
+    let _formFood = new formFood()
+    on(_tableRestaurant, 'Click_btnViewMenu', function (id) {
 
-    //         on(_tableRestaurant, 'Click_btnDelete', function (index) {
-    //             // editIndexRes = editIndexRes == index ? null : editIndexRes
-    //             // jsonQuery.deleteRestaurant(index)
-    //             // _tableRestaurant.createTable()
-    //             // alert('ลบข้อมูลเรียบร้อย')
-    //             jsonQuery.deleteRestaurant()
-    //         })
-    //     })
-    // })
+        // menu
+        _tableFood.placeAt('tableFood')
+        _formFood.placeAt('formFood')
+
+        jsonQuery.getRestaurantById(id).then(function (data) {
+            let dataRestaurantById = json.parse(data, true).result[0]
+            _tableFood.setNameRestaurant(dataRestaurantById.restaurantName)
+        })
 
 
+    })
 
-    // // view menu
-    // let _tableMenu
-    // let _formMenu
-    // on(_tableRestaurant, 'Click_btnViewMenu', function (item) {
+    // request
+    all({
+        getRestaurantType: jsonQuery.getRestaurantType(),
+        getRestaurant: jsonQuery.getRestaurant()
+    }).then(function (data) {
+        let dataRestaurantType = json.parse(data.getRestaurantType, true).result
+        let dataRestaurant = json.parse(data.getRestaurant, true).result
+        _tableRestaurant.startup(dataRestaurantType, dataRestaurant)
+    })
 
-    //     // menu
-    //     if (_tableMenu != undefined) {
-    //         _tableMenu.destroyRecursive(true)
-    //     }
-    //     if (_formMenu != undefined) {
-    //         _formMenu.destroyRecursive(true)
-    //     }
+    let updateTableRestaurant = function () {
+        jsonQuery.getRestaurant().then(function (data) {
+            let dataRestaurant = json.parse(data, true).result
+            _tableRestaurant.data = dataRestaurant
+            _tableRestaurant.createTable()
+        })
+    }
 
-    //     _tableMenu = new tableMenu({
-    //         dataType: dataLUTMenuType,
-    //         data: dataTblMenu,
-    //         nameRes: item.name
-    //     }, 'tableMenu')
-
-    //     // console.log(_tableMenu.domNode)
-
-    //     _formMenu = new formMenu({
-    //         dataType: dataLUTMenuType
-    //     }, 'formMenu')
-
-    //     let editIndexMenu
-    //     on(_tableMenu, 'Click_btnEdit', function (item, index) {
-    //         _formMenu.setForm(item)
-    //         editIndexMenu = index
-    //     })
-
-    //     on(_tableMenu, 'Click_btnDelete', function (index) {
-    //         editIndexMenu = editIndexMenu == index ? null : editIndexMenu
-    //         jsonQuery.deleteMenu(index)
-    //         _tableMenu.createTable()
-    //         alert('ลบข้อมูลเรียบร้อย')
-    //     })
-
-    //     let currentIdMenu = dataTblMenu.length
-    //     on(_tableMenu, 'Click_btnAddNewRow', function () {
-    //         let dataFormMenu = _formMenu.getForm()
-    //         jsonQuery.addMenu(++currentIdMenu, dataFormMenu)
-    //         _tableMenu.createTable()
-    //         alert('เพิ่มข้อมูลเรียบร้อย')
-    //     })
-
-    //     on(_formMenu, 'Click_btnSave', function () {
-    //         if (editIndexMenu != null) {
-    //             if (confirm('ต้องการบันทึกข้อมูลหรือไม่')) {
-    //                 let dataFormMenu = _formMenu.getForm()
-    //                 jsonQuery.updateMenu(editIndexMenu, dataFormMenu)
-    //                 _tableMenu.createTable()
-    //                 alert('บันทึกข้อมูลเรียบร้อย')
-    //             }
-    //         }
-    //     })
-
-    //     on(_formMenu, 'Click_btnCancel', function () {
-    //         editIndexMenu = null
-    //     })
-    // })
-
-    // let currentIdRes = dataTblRestaurant.length
-    // on(_tableRestaurant, 'Click_btnAddNewRow', function () {
-    //     let dataFormRestaurant = _formRestaurant.getForm()
-    //     jsonQuery.addRestaurant(++currentIdRes, dataFormRestaurant)
-    //     _tableRestaurant.createTable()
-    //     alert('เพิ่มข้อมูลเรียบร้อย')
-    // })
-
-    // on(_formRestaurant, 'Click_btnSave', function () {
-    //     if (editIndexRes != null) {
-    //         if (confirm('ต้องการบันทึกข้อมูลหรือไม่')) {
-    //             let dataFormRestaurant = _formRestaurant.getForm()
-    //             jsonQuery.updateRestaurant(editIndexRes, dataFormRestaurant)
-    //             _tableRestaurant.createTable()
-    //             alert('บันทึกข้อมูลเรียบร้อย')
-    //         }
-    //     }
-    // })
-
-    // on(_formRestaurant, 'Click_btnCancel', function () {
-    //     editIndexRes = null
-    // })
 })

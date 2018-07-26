@@ -1,33 +1,32 @@
 define([
+    'dojo/dom-construct',
     'dojo/dom-attr',
     'dojo/_base/declare',
     'widget/restaurant/formRestaurant',
-    'dojo/text!./templates/formMenu.html',
+    'dojo/text!./templates/formFood.html',
     'widget/form/textboxNumber'
-], function (domAttr, declare, formRestaurant, formMenu) {
+], function (domConstruct, domAttr, declare, formRestaurant, formFood) {
     return declare([formRestaurant], {
-        templateString: formMenu,
-        dataType: '',
-        postCreate: function () {
-            this.inherited(arguments)
-            this.textPriceNode.setCurrency('Baht')
-        },
+        templateString: formFood,
+        dataType: null,
         addOption: function () {
-            this.inherited(arguments)
+            this.dataType.forEach((item) => {
+                domConstruct.create('option', { innerHTML: item.categoryName, value: item.categoryId }, this.selectNode)
+            })
         },
         setForm: function (data) {
-            domAttr.set(this.textNameNode, 'value', data.name)
+            domAttr.set(this.textNameNode, 'value', data.foodName)
             domAttr.set(this.selectNode, 'value', data.categoryId)
             this.textPriceNode.setValue(data.price)
         },
         getForm: function () {
-            let menuCategoryName = this.dataType.find((item) => {
-                return item.id == domAttr.get(this.selectNode, 'value')
+            let foodCategoryName = this.dataType.find((item) => {
+                return item.categoryId == domAttr.get(this.selectNode, 'value')
             }).name
             return {
                 name: domAttr.get(this.textNameNode, 'value'),
                 categoryId: domAttr.get(this.selectNode, 'value'),
-                categoryName: menuCategoryName,
+                categoryName: foodCategoryName,
                 price: this.textPriceNode.getValue()
             }
         },

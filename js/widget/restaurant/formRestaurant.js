@@ -9,10 +9,7 @@ define([
 ], function (domConstruct, domAttr, declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, formRestaurant) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: formRestaurant,
-        dataType: '',
-        postCreate: function () {
-            this.addOption()
-        },
+        dataType: null,
         addOption: function () {
             this.dataType.forEach((item) => {
                 domConstruct.create('option', { innerHTML: item.name, value: item.id }, this.selectNode)
@@ -24,14 +21,10 @@ define([
             domAttr.set(this.textareaDetailNode, 'value', data.detail)
         },
         getForm: function () {
-            let resTypeName = this.dataType.find((item) => {
-                return item.id == domAttr.get(this.selectNode, 'value')
-            }).name
             return {
                 name: domAttr.get(this.textNameNode, 'value'),
-                restaurantType: domAttr.get(this.selectNode, 'value'),
-                restaurantTypeName: resTypeName,
-                detail: domAttr.get(this.textareaDetailNode, 'value')
+                detail: domAttr.get(this.textareaDetailNode, 'value'),
+                type: domAttr.get(this.selectNode, 'value')
             }
         },
         save: function () {
@@ -43,6 +36,10 @@ define([
             this.onClick_btnCancel()
         },
         onClick_btnSave: function () { },
-        onClick_btnCancel: function () { }
+        onClick_btnCancel: function () { },
+        startup: function (dataType) {
+            this.dataType = dataType
+            this.addOption()
+        }
     })
 })

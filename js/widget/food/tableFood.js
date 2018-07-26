@@ -4,19 +4,19 @@ define([
     'dojo/on',
     'dojo/_base/declare',
     'widget/restaurant/tableRestaurant',
-    'dojo/text!./templates/tableMenu.html'
-], function (domConstruct, domAttr, on, declare, tableRestaurant, tableMenu) {
+    'dojo/text!./templates/tableFood.html'
+], function (domConstruct, domAttr, on, declare, tableRestaurant, tableFood) {
     return declare([tableRestaurant], {
-        templateString: tableMenu,
-        dataType: '',
-        data: '',
-        nameRes: '',
-        postCreate: function () {
-            domAttr.set(this.h3NameResNode, 'innerHTML', `${this.nameRes}'s Menu`)
-            this.inherited(arguments)
+        templateString: tableFood,
+        dataType: null,
+        data: null,
+        setNameRestaurant: function (nameRestaurant) {
+            domAttr.set(this.h3NameResNode, 'innerHTML', `${nameRestaurant}'s Menu`)
         },
         addOption: function () {
-            this.inherited(arguments)
+            this.dataType.forEach((item) => {
+                domConstruct.create('option', { innerHTML: item.categoryName, value: item.categoryId }, this.selectShowNode)
+            })
         },
         createTable: function () {
             domConstruct.empty(this.tbodyNode)
@@ -24,7 +24,7 @@ define([
             this.data.forEach((item, index) => {
                 if (item.categoryId == selectShowNodeValue || selectShowNodeValue == 0) {
                     let trBodyTable = domConstruct.create('tr', null, this.tbodyNode)
-                    domConstruct.create('td', { innerHTML: item.name }, trBodyTable)
+                    domConstruct.create('td', { innerHTML: item.foodName }, trBodyTable)
                     domConstruct.create('td', { innerHTML: item.categoryName }, trBodyTable)
                     domConstruct.create('td', { innerHTML: item.price }, trBodyTable)
                     let tdButtonEdit = domConstruct.create('td', null, trBodyTable)
