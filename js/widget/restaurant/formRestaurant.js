@@ -9,25 +9,22 @@ define([
 ], function (domConstruct, domAttr, declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, formRestaurant) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: formRestaurant,
-        dataType: null,
-        addOption: function () {
-            this.dataType.forEach((item) => {
-                domConstruct.create('option', { innerHTML: item.name, value: item.id }, this.selectNode)
-            })
+        addOption: function (id, name) {
+            domConstruct.create('option', { innerHTML: name, value: id }, this.selectNode)
         },
-        setForm: function (data) {
-            domAttr.set(this.textNameNode, 'value', data.restaurantName)
-            domAttr.set(this.selectNode, 'value', data.restaurantTypeId)
-            domAttr.set(this.textareaDetailNode, 'value', data.detail)
+        setForm: function (id, name, detail) {
+            domAttr.set(this.textNameNode, 'value', name)
+            domAttr.set(this.selectNode, 'value', id)
+            domAttr.set(this.textareaDetailNode, 'value', detail)
         },
         getForm: function () {
             return {
                 name: domAttr.get(this.textNameNode, 'value'),
-                detail: domAttr.get(this.textareaDetailNode, 'value'),
-                type: domAttr.get(this.selectNode, 'value')
+                typeId: domAttr.get(this.selectNode, 'value'),
+                detail: domAttr.get(this.textareaDetailNode, 'value')
             }
         },
-        save: function () {
+        saveForm: function () {
             this.onClick_btnSave()
         },
         resetForm: function () {
@@ -36,10 +33,6 @@ define([
             this.onClick_btnCancel()
         },
         onClick_btnSave: function () { },
-        onClick_btnCancel: function () { },
-        startup: function (dataType) {
-            this.dataType = dataType
-            this.addOption()
-        }
+        onClick_btnCancel: function () { }
     })
 })

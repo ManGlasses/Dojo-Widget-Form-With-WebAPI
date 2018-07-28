@@ -2,47 +2,59 @@ define([
     'dojo/dom-construct',
     'dojo/dom-attr',
     'dojo/on',
+    'dojo/query',
     'dojo/_base/declare',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
-    'dojo/text!./templates/tableRestaurant.html'
-], function (domConstruct, domAttr, on, declare, _WidgetBase, _TemplatedMixin, tableRestaurant) {
+    'dojo/text!./templates/tableRestaurant.html',
+    'dojo/NodeList-traverse'
+], function (domConstruct, domAttr, on, query, declare, _WidgetBase, _TemplatedMixin, tableRestaurant) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: tableRestaurant,
-        dataType: null,
-        data: null,
-        addOption: function () {
-            this.dataType.forEach((item) => {
-                domConstruct.create('option', { innerHTML: item.name, value: item.id }, this.selectShowNode)
+        addOption: function (id, name) {
+            domConstruct.create('option', { innerHTML: name, value: id }, this.selectShowNode)
+        },
+        createTable: function (id, name, typeName) {
+            let trBodyTable = domConstruct.create('tr', null, this.tbodyNode)
+            domConstruct.create('td', { innerHTML: name }, trBodyTable)
+            domConstruct.create('td', { innerHTML: typeName }, trBodyTable)
+            let tdButtonViewMenu = domConstruct.create('td', null, trBodyTable)
+            let btnViewMenu = domConstruct.create('input', { type: 'button', value: 'View Menu' }, tdButtonViewMenu)
+            on(btnViewMenu, 'click', () => {
+                this.onClick_btnViewMenu(id)
+            })
+
+            let tdButtonEdit = domConstruct.create('td', null, trBodyTable)
+            let btnEdit = domConstruct.create('input', { type: 'button', value: 'Edit' }, tdButtonEdit)
+            on(btnEdit, 'click', () => {
+                this.onClick_btnEdit(id)
+            })
+
+            let tdButtonDelete = domConstruct.create('td', null, trBodyTable)
+            let btnDelete = domConstruct.create('input', { type: 'button', value: 'Delete' }, tdButtonDelete)
+            on(btnDelete, 'click', () => {
+                this.onClick_btnDelete(id)
             })
         },
-        createTable: function () {
+        clearTable: function () {
             domConstruct.empty(this.tbodyNode)
-            let selectShowNodeValue = domAttr.get(this.selectShowNode, 'value')
-            this.data.forEach((item, index) => {
-                if (item.restaurantTypeId == selectShowNodeValue || selectShowNodeValue == 0) {
-                    let trBodyTable = domConstruct.create('tr', null, this.tbodyNode)
-                    domConstruct.create('td', { innerHTML: item.restaurantName }, trBodyTable)
-                    domConstruct.create('td', { innerHTML: item.restaurantTypeName }, trBodyTable)
-                    let tdButtonViewMenu = domConstruct.create('td', null, trBodyTable)
-                    let btnViewMenu = domConstruct.create('input', { type: 'button', value: 'View Menu' }, tdButtonViewMenu)
-                    on(btnViewMenu, 'click', () => {
-                        this.onClick_btnViewMenu(item.restaurantId)
-                    })
-
-                    let tdButtonEdit = domConstruct.create('td', null, trBodyTable)
-                    let btnEdit = domConstruct.create('input', { type: 'button', value: 'Edit' }, tdButtonEdit)
-                    on(btnEdit, 'click', () => {
-                        this.onClick_btnEdit(item.restaurantId)
-                    })
-
-                    let tdButtonDelete = domConstruct.create('td', null, trBodyTable)
-                    let btnDelete = domConstruct.create('input', { type: 'button', value: 'Delete' }, tdButtonDelete)
-                    on(btnDelete, 'click', () => {
-                        if (confirm('ต้องการลบข้อมูลหรือไม่')) {
-                            this.onClick_btnDelete(item.restaurantId)
-                        }
-                    })
+        },
+        filterTable: function () {
+            let select = query(this.selectShowNode).children('option')
+            let selected = select.find((item) => {
+                return domAttr.get(item, 'value') == domAttr.get(this.selectShowNode, 'value')
+            })
+            let countRow = 0
+            let tr = query(this.tbodyNode).children('tr')
+            tr.forEach((item) => {
+                let tdTpye = query(item).children('td')[1]
+                if (tdTpye.innerHTML == selected.innerHTML || domAttr.get(this.selectShowNode, 'value') == 0) {
+                    domAttr.set(item, 'style', { display: '' })
+                    countRow % 2 == 0 ? domAttr.set(item, 'style', { backgroundColor: '#ffff' }) : domAttr.set(item, 'style', { backgroundColor: '#ddd' })
+                    countRow++
+                }
+                else {
+                    domAttr.set(item, 'style', { display: 'none' })
                 }
             })
         },
@@ -52,12 +64,6 @@ define([
         onClick_btnViewMenu: function (id) { },
         onClick_btnEdit: function (id) { },
         onClick_btnDelete: function (id) { },
-        onClick_btnAddNewRow: function () { },
-        startup: function (dataType, data) {
-            this.dataType = dataType
-            this.data = data
-            this.addOption()
-            this.createTable()
-        }
+        onClick_btnAddNewRow: function () { }
     })
 })

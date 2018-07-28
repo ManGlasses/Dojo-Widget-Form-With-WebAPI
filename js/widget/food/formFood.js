@@ -5,32 +5,28 @@ define([
     'widget/restaurant/formRestaurant',
     'dojo/text!./templates/formFood.html',
     'widget/form/textboxNumber'
-], function (domConstruct, domAttr, declare, formRestaurant, formFood) {
+], function (domConstruct, domAttr, declare, formRestaurant, formFood, textboxNumber) {
     return declare([formRestaurant], {
         templateString: formFood,
-        dataType: null,
-        addOption: function () {
-            this.dataType.forEach((item) => {
-                domConstruct.create('option', { innerHTML: item.categoryName, value: item.categoryId }, this.selectNode)
-            })
+        addOption: function (id, name) {
+            this.inherited(arguments)
         },
-        setForm: function (data) {
-            domAttr.set(this.textNameNode, 'value', data.foodName)
-            domAttr.set(this.selectNode, 'value', data.categoryId)
-            this.textPriceNode.setValue(data.price)
+        setForm: function (id, name, price) {
+            domAttr.set(this.textNameNode, 'value', name)
+            domAttr.set(this.selectNode, 'value', id)
+            this.textPriceNode.setValue(price)
         },
         getForm: function () {
-            let foodCategoryName = this.dataType.find((item) => {
-                return item.categoryId == domAttr.get(this.selectNode, 'value')
-            }).name
             return {
                 name: domAttr.get(this.textNameNode, 'value'),
                 categoryId: domAttr.get(this.selectNode, 'value'),
-                categoryName: foodCategoryName,
                 price: this.textPriceNode.getValue()
             }
         },
-        save: function () {
+        setCurrency: function (currency) {
+            this.textPriceNode.setCurrency(currency)
+        },
+        saveForm: function () {
             this.onClick_btnSave()
         },
         resetForm: function () {

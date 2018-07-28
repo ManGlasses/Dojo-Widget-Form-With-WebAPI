@@ -1,9 +1,10 @@
 define([
-    'dojo/request',
-    'dojo/request/xhr'
-], function (request, xhr) {
+    'dojo/request'
+], function (request) {
     let url = 'https://gdev.geotalent.co.th/Training/'
     return {
+
+        // >>>>>>>>>>>>>>>>>>>> restaurant <<<<<<<<<<<<<<<<<<<<
         getRestaurantType: function () {
             return request.get(url + 'api/restauranttype/all')
         },
@@ -12,12 +13,6 @@ define([
         },
         getRestaurantById: function (id) {
             return request.get(url + 'api/restaurant/' + id)
-        },
-        getFoodCategory: function () {
-            return request.get(url + 'api/foodcategory/all')
-        },
-        getFood: function () {
-            return request.get(url + 'api/food/all')
         },
         addRestaurant: function (name, detail, type) {
             return request.post(url + 'api/restaurant/create', {
@@ -57,23 +52,56 @@ define([
                 })
             })
         },
-        // addMenu: function (indexDataMenu, dataMenu) {
-        //     dataTblMenu.push({
-        //         id: indexDataMenu,
-        //         name: dataMenu.name,
-        //         categoryId: dataMenu.categoryId,
-        //         categoryName: dataMenu.categoryName,
-        //         price: dataMenu.price
-        //     })
-        // },
-        // updateMenu: function (indexDataMenu, dataMenu) {
-        //     dataTblMenu[indexDataMenu].name = dataMenu.name
-        //     dataTblMenu[indexDataMenu].categoryId = dataMenu.categoryId
-        //     dataTblMenu[indexDataMenu].categoryName = dataMenu.categoryName
-        //     dataTblMenu[indexDataMenu].price = dataMenu.price
-        // },
-        // deleteMenu: function (indexDataMenu) {
-        //     dataTblMenu.splice(indexDataMenu, 1)
-        // }
+        // >>>>>>>>>>>>>>>>>>>> end restaurant <<<<<<<<<<<<<<<<<<<<
+
+        // >>>>>>>>>>>>>>>>>>>> food <<<<<<<<<<<<<<<<<<<<
+        getFoodCategory: function () {
+            return request.get(url + 'api/foodcategory/all')
+        },
+        getFood: function () {
+            return request.get(url + 'api/food/all')
+        },
+        addFood: function (name, price, categoryId, restaurantId) {
+            return request.post(url + 'api/food/create', {
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                },
+                handleAs: 'json',
+                data: JSON.stringify({
+                    "name": name,
+                    "price": price,
+                    "categoryId": categoryId,
+                    "restaurantId": restaurantId
+                })
+            })
+        },
+        updateFood: function (id, name, price, categoryId, restaurantId) {
+            return request.post(url + 'api/food/update', {
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                },
+                handleAs: 'json',
+                data: JSON.stringify({
+                    "id": id,
+                    "name": name,
+                    "price": price,
+                    "categoryId": categoryId,
+                    "restaurantId": restaurantId
+                })
+            })
+        },
+        deleteFood: function (id) {
+            return request.post(url + 'api/food/delete', {
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                },
+                handleAs: 'json',
+                data: JSON.stringify({
+                    "id": id
+                })
+            })
+        }
+        // >>>>>>>>>>>>>>>>>>>> end food <<<<<<<<<<<<<<<<<<<<
+
     }
 })

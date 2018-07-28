@@ -11,12 +11,7 @@ define([
             domAttr.set(this.currencyNode, 'innerHTML', currency)
         },
         check: function () {
-            if (/\D/.test(domAttr.get(this.textNumberNode, 'value'))) {
-                domAttr.set(this.messageNode, 'innerHTML', 'กรอกข้อมูลที่เป็นตัวเลขเท่านั้น')
-            }
-            else {
-                domAttr.set(this.messageNode, 'innerHTML', '')
-            }
+            domAttr.set(this.textNumberNode, 'value', domAttr.get(this.textNumberNode, 'value').replace(/[^0-9]/g, ""))
         },
         getValue: function () {
             return domAttr.get(this.textNumberNode, 'value')
