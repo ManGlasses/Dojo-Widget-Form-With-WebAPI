@@ -22,6 +22,7 @@ require([
             let dataRestaurantType = json.parse(data, true).result
             domConstruct.empty(dom.byId('formRestaurant'))
             let _formRestaurant = new formRestaurant().placeAt('formRestaurant')
+            _formRestaurant.set_textbox(0, 200)
             dataRestaurantType.forEach((item) => {
                 _formRestaurant.addOption(item.id, item.name)
             })
@@ -69,6 +70,7 @@ require([
             let dataRestaurantType = json.parse(data, true).result
             domConstruct.empty(dom.byId('formRestaurant'))
             let _formRestaurant = new formRestaurant().placeAt('formRestaurant')
+            _formRestaurant.set_textbox(0, 200)
             dataRestaurantType.forEach((item) => {
                 _formRestaurant.addOption(item.id, item.name)
             })
@@ -89,13 +91,14 @@ require([
 
     // view menu
     let idViewMenu
-    let _tableFood = new tableFood()
     on(_tableRestaurant, 'Click_btnViewMenu', function (idRestaurant) {
 
         // >>>>>>>>>>>>>>>>>>>> food <<<<<<<<<<<<<<<<<<<<
         idViewMenu = idRestaurant
-        domConstruct.empty(dom.byId('formFood'))
+        let _tableFood = new tableFood()
+        domConstruct.empty(dom.byId('tableFood'))
         _tableFood.placeAt('tableFood')
+        domConstruct.empty(dom.byId('formFood'))
 
         // edit food
         let idEditFood
@@ -107,7 +110,10 @@ require([
                 dataFoodCategory.forEach((item) => {
                     _formFood.addOption(item.categoryId, item.categoryName)
                 })
-                _formFood.setCurrency('Baht')
+
+                _formFood.set_textbox(0, 200)
+                _formFood.set_textboxNumber('Baht', 0, Number.MAX_SAFE_INTEGER)
+
                 jsonQuery.getFood().then(function (data) {
                     let dataFood = json.parse(data, true).result
                     let dataFoodById = dataFood.find((item) => {
@@ -153,7 +159,10 @@ require([
                 dataFoodCategory.forEach((item) => {
                     _formFood.addOption(item.categoryId, item.categoryName)
                 })
-                _formFood.setCurrency('Baht')
+
+                _formFood.set_textbox(0, 200)
+                _formFood.set_textboxNumber('Baht', 0, Number.MAX_SAFE_INTEGER)
+
                 on(_formFood, 'Click_btnSave', function () {
                     if (confirm('ต้องการเพิ่มข้อมูลหรือไม่')) {
                         let inputFormFood = _formFood.getForm()

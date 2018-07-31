@@ -13,16 +13,19 @@ define([
             domConstruct.create('option', { innerHTML: name, value: id }, this.selectNode)
         },
         setForm: function (id, name, detail) {
-            domAttr.set(this.textNameNode, 'value', name)
+            this.textNameNode.setValue(name)
             domAttr.set(this.selectNode, 'value', id)
             domAttr.set(this.textareaDetailNode, 'value', detail)
         },
         getForm: function () {
             return {
-                name: domAttr.get(this.textNameNode, 'value'),
+                name: this.textNameNode.getValue(),
                 typeId: domAttr.get(this.selectNode, 'value'),
                 detail: domAttr.get(this.textareaDetailNode, 'value')
             }
+        },
+        set_textbox: function (min, max) {
+            this.textNameNode.setMinMaxLength(min, max)
         },
         saveForm: function () {
             this.onClick_btnSave()

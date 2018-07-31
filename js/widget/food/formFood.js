@@ -1,30 +1,34 @@
 define([
-    'dojo/dom-construct',
     'dojo/dom-attr',
     'dojo/_base/declare',
     'widget/restaurant/formRestaurant',
     'dojo/text!./templates/formFood.html',
+    'widget/form/textbox',
     'widget/form/textboxNumber'
-], function (domConstruct, domAttr, declare, formRestaurant, formFood, textboxNumber) {
+], function (domAttr, declare, formRestaurant, formFood) {
     return declare([formRestaurant], {
         templateString: formFood,
         addOption: function (id, name) {
             this.inherited(arguments)
         },
         setForm: function (id, name, price) {
-            domAttr.set(this.textNameNode, 'value', name)
+            this.textNameNode.setValue(name)
             domAttr.set(this.selectNode, 'value', id)
             this.textPriceNode.setValue(price)
         },
         getForm: function () {
             return {
-                name: domAttr.get(this.textNameNode, 'value'),
+                name: this.textNameNode.getValue(),
                 categoryId: domAttr.get(this.selectNode, 'value'),
                 price: this.textPriceNode.getValue()
             }
         },
-        setCurrency: function (currency) {
+        set_textbox: function (min, max) {
+            this.textNameNode.setMinMaxLength(min, max)
+        },
+        set_textboxNumber: function (currency, min, max) {
             this.textPriceNode.setCurrency(currency)
+            this.textPriceNode.setMinMax(min, max)
         },
         saveForm: function () {
             this.onClick_btnSave()
