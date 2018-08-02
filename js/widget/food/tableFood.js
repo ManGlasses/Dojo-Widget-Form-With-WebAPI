@@ -8,6 +8,7 @@ define([
 ], function (domConstruct, domAttr, on, declare, tableRestaurant, tableFood) {
     return declare([tableRestaurant], {
         templateString: tableFood,
+        baseClass: 'tableFood',
         setNameRestaurant: function (name) {
             domAttr.set(this.h3NameResNode, 'innerHTML', `${name}'s Menu`)
         },

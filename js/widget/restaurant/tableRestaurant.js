@@ -11,6 +11,7 @@ define([
 ], function (domConstruct, domAttr, on, query, declare, _WidgetBase, _TemplatedMixin, tableRestaurant) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: tableRestaurant,
+        baseClass: 'tableRestaurant',
         addOption: function (id, name) {
             domConstruct.create('option', { innerHTML: name, value: id }, this.selectShowNode)
         },
